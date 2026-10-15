@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brankas Pribadi</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0e1815;--bg2:#15231f;--card:#1a2b26;--line:#2e443d;--gold:#d9c28f;--gold2:#b89c63;--ivory:#f3ede0;--mute:#9fb0a8;--red:#d77a6a;
+--serif:'Cormorant Garamond',Georgia,serif;--sans:'Jost','Segoe UI',sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:radial-gradient(1200px 600px at 80% -10%,#1f362f 0%,var(--bg) 60%) fixed;color:var(--ivory);min-height:100vh;font-weight:300;line-height:1.6}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.hidden{display:none!important}
+h1,h2,h3{font-family:var(--serif);font-weight:600;letter-spacing:.01em}
+.btn{background:var(--gold);color:#1a1a14;border:0;padding:.65rem 1.4rem;border-radius:2px;font-weight:500;cursor:pointer;transition:.2s}
+.btn:hover{background:#ecd9a8}
+.btn.ghost{background:transparent;color:var(--gold);border:1px solid var(--gold2)}
+.btn.ghost:hover{background:rgba(217,194,143,.1)}
+.btn.sm{padding:.35rem .9rem;font-size:.85rem}
+input,textarea,select{width:100%;background:var(--bg);border:1px solid var(--line);padding:.7rem .9rem;border-radius:2px;margin-top:.35rem}
+input:focus,textarea:focus,select:focus{border-color:var(--gold);outline:none}
+label{font-size:.9rem;color:var(--mute);display:block;margin-top:1rem}
+
+/* Login */
+#login{min-height:100vh;display:grid;place-items:center;padding:1.5rem}
+.login-box{width:100%;max-width:420px;border:1px solid var(--line);background:rgba(21,35,31,.85);padding:3rem 2.4rem;text-align:center;position:relative}
+.login-box::before{content:"";position:absolute;inset:8px;border:1px solid rgba(217,194,143,.25);pointer-events:none}
+.login-box h1{font-size:3rem;color:var(--gold);line-height:1.1;animation:rise 1s ease both}
+.login-box p.sub{color:var(--mute);margin:.6rem 0 1.6rem}
+.login-box form{text-align:left}
+.login-box .btn{width:100%;margin-top:1.6rem;padding:.85rem}
+.err{color:var(--red);font-size:.9rem;margin-top:.8rem;min-height:1.3rem;text-align:center}
+@keyframes rise{from{opacity:0;transform:translateY(14px);letter-spacing:.1em}to{opacity:1;transform:none}}
+
+/* App */
+header{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:1.2rem 5vw;border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(14,24,21,.92);backdrop-filter:blur(8px);z-index:5}
+header .brand{font-family:var(--serif);font-size:1.7rem;color:var(--gold);font-weight:600}
+header .right{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap}
+.who{color:var(--mute);font-size:.9rem;margin-right:.4rem}
+main{padding:2.5rem 5vw 5rem;max-width:1400px;margin:0 auto}
+.hero{margin-bottom:2rem}
+.hero h2{font-size:clamp(2rem,5vw,3.4rem);line-height:1.1}
+.hero p{color:var(--mute);margin-top:.5rem}
+.stats{display:flex;gap:2rem;margin-top:1.2rem;color:var(--mute);font-size:.95rem;flex-wrap:wrap}
+.stats b{color:var(--gold);font-family:var(--serif);font-size:1.5rem;margin-right:.3rem}
+.bar{display:flex;gap:1rem;justify-content:space-between;flex-wrap:wrap;margin:2rem 0 1.5rem;align-items:center}
+.tabs{display:flex;gap:.4rem;flex-wrap:wrap}
+.tab{background:none;border:0;border-bottom:2px solid transparent;color:var(--mute);padding:.4rem .9rem;cursor:pointer;font-size:1rem}
+.tab.on{color:var(--gold);border-color:var(--gold)}
+.bar input{max-width:260px;margin:0}
+.grid{columns:260px;column-gap:1.2rem}
+.card{break-inside:avoid;margin-bottom:1.2rem;background:var(--card);border:1px solid var(--line);overflow:hidden;position:relative;transition:.25s}
+.card:hover{border-color:var(--gold2);transform:translateY(-3px)}
+.card .media{display:block;width:100%;cursor:zoom-in;background:#000}
+.card img.media,.card video.media{object-fit:cover;max-height:420px}
+.card .info{padding:.9rem 1rem 1rem}
+.card h3{font-size:1.25rem;word-break:break-word}
+.card p{color:var(--mute);font-size:.9rem;word-break:break-word}
+.card .meta{font-size:.78rem;color:var(--gold2);margin-top:.4rem}
+.link-card{padding:1.3rem 1.2rem}
+.link-card .host{color:var(--gold);font-size:.85rem;margin-bottom:.4rem}
+.link-card a.go{display:inline-block;margin-top:.8rem;color:var(--gold);text-decoration:none;border-bottom:1px solid var(--gold2)}
+.del{position:absolute;top:8px;right:8px;background:rgba(14,24,21,.85);border:1px solid var(--line);color:var(--red);width:30px;height:30px;border-radius:50%;cursor:pointer;z-index:2}
+.empty{text-align:center;padding:4rem 1rem;color:var(--mute);border:1px dashed var(--line)}
+.empty h3{font-size:1.8rem;color:var(--ivory)}
+
+/* Modal */
+.modal{position:fixed;inset:0;background:rgba(5,10,8,.82);display:grid;place-items:center;padding:1rem;z-index:20;overflow:auto}
+.sheet{background:var(--bg2);border:1px solid var(--line);width:100%;max-width:520px;padding:2rem;max-height:92vh;overflow:auto}
+.sheet h2{color:var(--gold);font-size:2rem;margin-bottom:.5rem}
+.row{display:flex;gap:.6rem;margin-top:1.4rem;justify-content:flex-end}
+.seg{display:flex;gap:.4rem;margin-top:.6rem}
+.seg button{flex:1;background:var(--bg);border:1px solid var(--line);padding:.6rem;cursor:pointer}
+.seg button.on{border-color:var(--gold);color:var(--gold)}
+.ulist{margin-top:1rem}
+.u{display:flex;justify-content:space-between;align-items:center;padding:.7rem 0;border-bottom:1px solid var(--line)}
+.u small{color:var(--mute)}
+.badge{font-size:.75rem;border:1px solid var(--gold2);color:var(--gold);padding:.05rem .5rem;margin-left:.5rem}
+#lb{background:rgba(5,10,8,.96);flex-direction:column}
+#lb .box{max-width:94vw;max-height:84vh}
+#lb img,#lb video{max-width:94vw;max-height:80vh;display:block;margin:auto}
+#lb .cap{text-align:center;margin-top:.8rem;font-family:var(--serif);font-size:1.4rem}
+#lb .x{position:absolute;top:14px;right:20px;font-size:2.2rem;background:none;border:0;color:var(--gold);cursor:pointer}
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--gold);color:#1a1a14;padding:.6rem 1.4rem;z-index:50;opacity:0;transition:.3s;pointer-events:none}
+#toast.show{opacity:1}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<section id="login">
+  <div class="login-box">
+    <h1>Brankas<br>Pribadi</h1>
+    <p class="sub">Masuk untuk melihat koleksi foto, video, dan tautan.</p>
+    <form id="loginForm">
+      <label for="lu">Username</label><input id="lu" autocomplete="username" required>
+      <label for="lp">Password</label><input id="lp" type="password" autocomplete="current-password" required>
+      <div class="err" id="lerr"></div>
+      <button class="btn" type="submit">Masuk</button>
+    </form>
+  </div>
+</section>
+
+<!-- APP -->
+<div id="app" class="hidden">
+  <header>
+    <div class="brand">Brankas Pribadi</div>
+    <div class="right">
+      <span class="who" id="who"></span>
+      <button class="btn ghost sm admin-only" id="btnUsers">Kelola akses</button>
+      <button class="btn ghost sm" id="btnPass">Ganti password</button>
+      <button class="btn sm" id="btnOut">Keluar</button>
+    </div>
+  </header>
+  <main>
+    <div class="hero">
+      <h2>Koleksi yang tersimpan rapi.</h2>
+      <p>Hanya akun yang kamu izinkan yang bisa membuka halaman ini.</p>
+      <div class="stats" id="stats"></div>
+    </div>
+    <div class="bar">
+      <div class="tabs" id="tabs">
+        <button class="tab on" data-t="all">Semua</button>
+        <button class="tab" data-t="photo">Foto</button>
+        <button class="tab" data-t="video">Video</button>
+        <button class="tab" data-t="link">Link</button>
+      </div>
+      <div style="display:flex;gap:.6rem;flex-wrap:wrap">
+        <input id="q" placeholder="Cari judul atau catatan…" aria-label="Cari">
+        <button class="btn admin-only" id="btnAdd">Tambah data</button>
+      </div>
+    </div>
+    <div class="grid" id="grid"></div>
+  </main>
+</div>
+
+<!-- MODAL TAMBAH -->
+<div class="modal hidden" id="mAdd"><div class="sheet">
+  <h2>Tambah data</h2>
+  <div class="seg" id="seg">
+    <button data-k="file" class="on">Foto / video</button>
+    <button data-k="link">Link</button>
+  </div>
+  <div id="fFile">
+    <label>Pilih file (bisa banyak sekaligus)</label>
+    <input type="file" id="files" accept="image/*,video/*" multiple>
+  </div>
+  <div id="fLink" class="hidden">
+    <label>Alamat link</label><input id="lurl" placeholder="https://contoh.com">
+  </div>
+  <label>Judul <small>(opsional untuk file)</small></label><input id="ttl">
+  <label>Catatan</label><textarea id="dsc" rows="3"></textarea>
+  <div class="row"><button class="btn ghost" data-close>Batal</button><button class="btn" id="save">Simpan</button></div>
+</div></div>
+
+<!-- MODAL USER -->
+<div class="modal hidden" id="mUsers"><div class="sheet">
+  <h2>Kelola akses</h2>
+  <p style="color:var(--mute)">Buat akun untuk orang yang boleh masuk. Hapus akun untuk mencabut aksesnya.</p>
+  <div class="ulist" id="ulist"></div>
+  <label>Username baru</label><input id="nu" autocomplete="off">
+  <label>Password</label><input id="np" type="text" autocomplete="off">
+  <label>Peran</label>
+  <select id="nr"><option value="viewer">Pelihat (hanya melihat)</option><option value="admin">Admin (bisa tambah &amp; hapus)</option></select>
+  <div class="row"><button class="btn ghost" data-close>Tutup</button><button class="btn" id="addUser">Buat akun</button></div>
+</div></div>
+
+<!-- MODAL PASSWORD -->
+<div class="modal hidden" id="mPass"><div class="sheet">
+  <h2>Ganti password</h2>
+  <label>Password lama</label><input id="op" type="password">
+  <label>Password baru (min. 6 karakter)</label><input id="npw" type="password">
+  <div class="row"><button class="btn ghost" data-close>Batal</button><button class="btn" id="savePass">Simpan</button></div>
+</div></div>
+
+<!-- LIGHTBOX -->
+<div class="modal hidden" id="lb"><button class="x" data-close aria-label="Tutup">×</button><div class="box" id="lbBox"></div><div class="cap" id="lbCap"></div></div>
+<div id="toast"></div>
+
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)};
+const esc=s=>(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+/* ---------- Hash password ---------- */
+async function hash(p){
+  try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('brankas::'+p));
+    return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+  catch(e){let h=5381;for(const c of 'brankas::'+p)h=((h*33)^c.charCodeAt(0))>>>0;return 'f'+h}
+}
+
+/* ---------- Akun ---------- */
+const getUsers=()=>JSON.parse(localStorage.getItem('b_users')||'[]');
+const setUsers=u=>localStorage.setItem('b_users',JSON.stringify(u));
+async function initUsers(){
+  if(!getUsers().length) setUsers([{u:'admin',h:await hash('admin123'),role:'admin'}]);
+}
+let me=null;
+
+/* ---------- IndexedDB (foto & video) ---------- */
+const dbp=new Promise((res,rej)=>{const r=indexedDB.open('brankas',1);
+  r.onupgradeneeded=()=>r.result.createObjectStore('items',{keyPath:'id'});
+  r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)});
+async function store(mode,fn){const db=await dbp;return new Promise((res,rej)=>{
+  const t=db.transaction('items',mode);const r=fn(t.objectStore('items'));
+  t.oncomplete=()=>res(r.result);t.onerror=()=>rej(t.error)})}
+const allItems=()=>store('readonly',s=>s.getAll());
+const putItem=i=>store('readwrite',s=>s.put(i));
+const delItem=id=>store('readwrite',s=>s.delete(id));
+
+/* ---------- Login ---------- */
+$('#loginForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const u=$('#lu').value.trim(), h=await hash($('#lp').value);
+  const f=getUsers().find(x=>x.u.toLowerCase()===u.toLowerCase()&&x.h===h);
+  if(!f){$('#lerr').textContent='Username atau password salah.';return}
+  sessionStorage.setItem('b_me',f.u);start(f);
+});
+function start(f){
+  me=f;$('#login').classList.add('hidden');$('#app').classList.remove('hidden');
+  $('#who').innerHTML=esc(f.u)+'<span class="badge">'+(f.role==='admin'?'Admin':'Pelihat')+'</span>';
+  $$('.admin-only').forEach(el=>el.classList.toggle('hidden',f.role!=='admin'));
+  render();
+}
+$('#btnOut').onclick=()=>{sessionStorage.removeItem('b_me');location.reload()};
+
+/* ---------- Tampilan ---------- */
+let tab='all',urls={};
+$('#tabs').onclick=e=>{const b=e.target.closest('.tab');if(!b)return;
+  $$('.tab').forEach(x=>x.classList.remove('on'));b.classList.add('on');tab=b.dataset.t;render()};
+$('#q').oninput=()=>render();
+async function render(){
+  const items=(await allItems()).sort((a,b)=>b.date-a.date);
+  const n=t=>items.filter(i=>i.type===t).length;
+  $('#stats').innerHTML=`<span><b>${n('photo')}</b>foto</span><span><b>${n('video')}</b>video</span><span><b>${n('link')}</b>link</span>`;
+  const q=$('#q').value.toLowerCase();
+  const list=items.filter(i=>(tab==='all'||i.type===tab)&&((i.title||'')+(i.desc||'')+(i.url||'')).toLowerCase().includes(q));
+  const g=$('#grid');
+  if(!list.length){g.innerHTML=`<div class="empty"><h3>Belum ada data di sini</h3><p>${me.role==='admin'?'Klik “Tambah data” untuk mulai menyimpan.':'Admin belum menambahkan data.'}</p></div>`;g.style.columns='1';return}
+  g.style.columns='';
+  g.innerHTML=list.map(i=>{
+    if(i.blob&&!urls[i.id])urls[i.id]=URL.createObjectURL(i.blob);
+    const d=new Date(i.date).toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
+    const del=me.role==='admin'?`<button class="del" data-del="${i.id}" title="Hapus" aria-label="Hapus">✕</button>`:'';
+    const info=`<div class="info"><h3>${esc(i.title)}</h3>${i.desc?`<p>${esc(i.desc)}</p>`:''}<div class="meta">${d}</div></div>`;
+    if(i.type==='photo')return`<div class="card">${del}<img class="media" data-open="${i.id}" src="${urls[i.id]}" alt="${esc(i.title)}" loading="lazy">${info}</div>`;
+    if(i.type==='video')return`<div class="card">${del}<video class="media" data-open="${i.id}" src="${urls[i.id]}#t=0.5" preload="metadata" muted></video>${info}</div>`;
+    let host='';try{host=new URL(i.url).hostname}catch(e){}
+    return`<div class="card link-card">${del}<div class="host">${esc(host)}</div><h3>${esc(i.title)}</h3>${i.desc?`<p>${esc(i.desc)}</p>`:''}<a class="go" href="${esc(i.url)}" target="_blank" rel="noopener noreferrer">Buka link</a><div class="meta">${d}</div></div>`;
+  }).join('');
+}
+$('#grid').onclick=async e=>{
+  const d=e.target.closest('[data-del]');
+  if(d){if(confirm('Hapus data ini secara permanen?')){await delItem(d.dataset.del);delete urls[d.dataset.del];render();toast('Data dihapus')}return}
+  const o=e.target.closest('[data-open]');
+  if(o){const it=(await allItems()).find(x=>x.id===o.dataset.open);
+    $('#lbBox').innerHTML=it.type==='photo'?`<img src="${urls[it.id]}" alt="">`:`<video src="${urls[it.id]}" controls autoplay></video>`;
+    $('#lbCap').textContent=it.title;$('#lb').classList.remove('hidden')}
+};
+
+/* ---------- Modal ---------- */
+const open=id=>$(id).classList.remove('hidden');
+$$('[data-close]').forEach(b=>b.onclick=()=>{b.closest('.modal').classList.add('hidden');$('#lbBox').innerHTML=''});
+$$('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m){m.classList.add('hidden');$('#lbBox').innerHTML=''}}));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')$$('.modal').forEach(m=>m.classList.add('hidden'))});
+
+/* Tambah data */
+let kind='file';
+$('#btnAdd').onclick=()=>open('#mAdd');
+$('#seg').onclick=e=>{const b=e.target.closest('button');if(!b)return;kind=b.dataset.k;
+  $$('#seg button').forEach(x=>x.classList.toggle('on',x===b));
+  $('#fFile').classList.toggle('hidden',kind!=='file');$('#fLink').classList.toggle('hidden',kind!=='link')};
+$('#save').onclick=async()=>{
+  const title=$('#ttl').value.trim(),desc=$('#dsc').value.trim();
+  try{
+    if(kind==='link'){
+      let url=$('#lurl').value.trim();if(!url)return toast('Isi alamat link dulu');
+      if(url.startsWith('//'))url='https:'+url;
+      else if(!/^https?:\/\//i.test(url)){
+        if(/^[a-z][a-z\d+.-]*:(?!\d+(?:\/|$))/i.test(url))return toast('Gunakan URL HTTP atau HTTPS');
+        url='https://'+url;
+      }
+      try{const parsed=new URL(url);if(!['http:','https:'].includes(parsed.protocol)||!parsed.hostname)throw new Error()}
+      catch(e){return toast('Alamat link tidak valid. Gunakan URL HTTP atau HTTPS.')}
+      await putItem({id:crypto.randomUUID?crypto.randomUUID():Date.now()+'',type:'link',title:title||url,url,desc,date:Date.now()});
+    }else{
+      const fs=[...$('#files').files];if(!fs.length)return toast('Pilih file dulu');
+      let saved=0;
+      for(const f of fs){
+        const type=f.type.startsWith('video')?'video':f.type.startsWith('image')?'photo':null;if(!type)continue;
+        await putItem({id:(crypto.randomUUID?crypto.randomUUID():Date.now()+Math.random()+''),type,title:(fs.length===1&&title)||f.name.replace(/\.[^.]+$/,''),desc,blob:f,date:Date.now()});
+        saved++;
+      }
+      if(!saved)return toast('Tidak ada file foto atau video yang didukung');
+      $('#ttl').value=$('#dsc').value=$('#lurl').value=$('#files').value='';
+      $('#mAdd').classList.add('hidden');render();
+      toast(saved===fs.length?'Tersimpan':`${saved} file tersimpan; file lainnya tidak didukung`);
+      return;
+    }
+    $('#ttl').value=$('#dsc').value=$('#lurl').value=$('#files').value='';
+    $('#mAdd').classList.add('hidden');render();toast('Tersimpan');
+  }catch(e){toast('Gagal menyimpan: penyimpanan browser penuh?')}
+};
+
+/* Kelola akses */
+function drawUsers(){
+  $('#ulist').innerHTML=getUsers().map(u=>`<div class="u"><div>${esc(u.u)}<span class="badge">${u.role==='admin'?'Admin':'Pelihat'}</span></div>${u.u===me.u?'<small>akun kamu</small>':`<button class="btn ghost sm" data-rm="${esc(u.u)}">Cabut akses</button>`}</div>`).join('');
+}
+$('#btnUsers').onclick=()=>{drawUsers();open('#mUsers')};
+$('#ulist').onclick=e=>{const b=e.target.closest('[data-rm]');if(!b)return;
+  if(confirm('Cabut akses "'+b.dataset.rm+'"?')){setUsers(getUsers().filter(u=>u.u!==b.dataset.rm));drawUsers();toast('Akses dicabut')}};
+$('#addUser').onclick=async()=>{
+  const u=$('#nu').value.trim(),p=$('#np').value;
+  if(u.length<3||p.length<6)return toast('Username min. 3, password min. 6 karakter');
+  if(getUsers().some(x=>x.u.toLowerCase()===u.toLowerCase()))return toast('Username sudah dipakai');
+  setUsers([...getUsers(),{u,h:await hash(p),role:$('#nr').value}]);
+  $('#nu').value=$('#np').value='';drawUsers();toast('Akun dibuat');
+};
+
+/* Ganti password */
+$('#btnPass').onclick=()=>open('#mPass');
+$('#savePass').onclick=async()=>{
+  const us=getUsers(),i=us.findIndex(x=>x.u===me.u);
+  if(us[i].h!==await hash($('#op').value))return toast('Password lama salah');
+  if($('#npw').value.length<6)return toast('Password baru min. 6 karakter');
+  us[i].h=await hash($('#npw').value);setUsers(us);
+  $('#op').value=$('#npw').value='';$('#mPass').classList.add('hidden');toast('Password diganti');
+};
+
+/* ---------- Mulai ---------- */
+(async()=>{
+  await initUsers();
+  const s=sessionStorage.getItem('b_me'),f=s&&getUsers().find(x=>x.u===s);
+  if(f)start(f);
+})();
+</script>
+</body>
+</html>
