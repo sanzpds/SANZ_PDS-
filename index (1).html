@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BrankasKu - Data Pribadi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eceee9;--card:#fff;--ink:#17201c;--mut:#5f6b64;--line:#d9ddd6;--pri:#1f5f4a;--pri2:#174a3a;--onpri:#fff;--dan:#b42318}
+@media(prefers-color-scheme:dark){:root{--bg:#0e1411;--card:#161f1a;--ink:#e6ede8;--mut:#92a398;--line:#26332b;--pri:#5fd3a4;--pri2:#86e3bd;--onpri:#06231a;--dan:#f87171}}
+#auth[data-role=admin]{--pri:#a16207;--pri2:#854d0e;--onpri:#fff}
+@media(prefers-color-scheme:dark){#auth[data-role=admin]{--pri:#fbbf24;--pri2:#fcd34d;--onpri:#2b1d02}}
+*{box-sizing:border-box}
+body{margin:0;font:15px/1.55 "Bricolage Grotesque",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+h1,h2,h3,h4{margin:0;letter-spacing:-.02em}
+[hidden]{display:none!important}
+button,input,select,textarea{font:inherit;color:inherit}
+label{display:block;font-size:13px;color:var(--mut);margin-bottom:12px}
+input,select,textarea{display:block;width:100%;margin-top:4px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--card)}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid var(--pri);outline-offset:2px}
+.btn{display:inline-block;border:0;border-radius:8px;padding:10px 18px;background:var(--pri);color:var(--onpri);font-weight:600;cursor:pointer;text-decoration:none}
+.btn:hover{background:var(--pri2)}
+.btn.sm{padding:6px 12px;font-size:13px}
+.btn.alt,.btn.danger{background:transparent;color:var(--pri);box-shadow:inset 0 0 0 1px var(--pri)}
+.btn.danger{color:var(--dan);box-shadow:inset 0 0 0 1px var(--dan)}
+.btn.alt:hover,.btn.danger:hover{background:var(--line)}
+/* login */
+.auth{min-height:100vh;display:grid;grid-template-columns:1.1fr 1fr;align-items:center;gap:48px;max-width:1000px;margin:0 auto;padding:32px 20px}
+.lockers{display:grid;grid-template-columns:repeat(4,56px);gap:8px;margin-bottom:28px}
+.lockers i{height:56px;border-radius:6px;border:2px solid var(--pri);position:relative;opacity:.35}
+.lockers i::after{content:"";position:absolute;right:9px;top:50%;width:7px;height:7px;margin-top:-3px;border-radius:50%;background:var(--pri)}
+.lockers i:nth-child(6){opacity:1;background:var(--pri)}.lockers i:nth-child(6)::after{background:var(--onpri)}
+.hero h1{font-size:clamp(38px,6vw,60px);line-height:1;font-weight:800}
+.hero p{color:var(--mut);max-width:36ch;font-size:17px;margin:16px 0 0}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px}
+.panel .btn{width:100%}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--bg);border-radius:10px;padding:4px;margin-bottom:22px}
+.seg button{border:0;background:none;padding:9px;border-radius:7px;cursor:pointer;font-weight:600;color:var(--mut)}
+.seg button.on{background:var(--card);color:var(--pri)}
+.panel h2{font-size:22px;margin-bottom:16px}
+.err{color:var(--dan);min-height:1.4em;margin:0 0 8px;font-size:13px}
+.hint{color:var(--mut);font-size:13px;margin:14px 0 0}
+/* app */
+.top{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding:12px 20px;background:var(--card);border-bottom:1px solid var(--line)}
+.brand{font-size:20px;font-weight:800;color:var(--pri)}
+nav{display:flex;gap:4px;flex:1}
+nav button{border:0;background:none;padding:8px 14px;border-radius:8px;cursor:pointer;color:var(--mut);font-weight:600}
+nav button.on{background:var(--bg);color:var(--pri)}
+.who{display:flex;align-items:center;gap:10px;font-size:14px}
+.badge{font-style:normal;font-size:12px;padding:2px 9px;border-radius:99px;background:var(--pri);color:var(--onpri)}
+.ghost{border:1px solid var(--line);background:none;border-radius:8px;padding:6px 12px;cursor:pointer}
+.wrap{max-width:1000px;margin:0 auto;padding:24px 20px 60px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px}
+.form{padding:20px;margin-bottom:24px}.form h3{margin-bottom:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0 14px}
+.narrow{max-width:420px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.chips button{border:1px solid var(--line);background:var(--card);border-radius:99px;padding:5px 14px;cursor:pointer}
+.chips button.on{background:var(--pri);color:var(--onpri);border-color:var(--pri)}
+.list{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
+.item{overflow:hidden;display:flex;flex-direction:column}
+.item img,.item video{width:100%;height:180px;object-fit:cover;display:block;background:#000}
+.doc{height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:var(--bg);padding:12px;text-align:center;word-break:break-all}
+.doc b{font-size:30px;font-weight:800;color:var(--pri)}.doc span{font-size:13px}.doc small{color:var(--mut)}
+.body{padding:14px;display:flex;flex-direction:column;gap:6px;flex:1}
+.body p{margin:0;color:var(--mut);font-size:14px;flex:1}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.row small{color:var(--mut)}.row span{display:flex;gap:6px}
+.empty{text-align:center;color:var(--mut);padding:40px 0}
+.mem{padding:16px}.mem dl{margin:10px 0 14px;font-size:14px}.mem dt{color:var(--mut);font-size:12px}.mem dd{margin:0 0 6px}
+#toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,16px);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:8px;opacity:0;transition:.25s;pointer-events:none;z-index:9}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+@media(max-width:720px){.auth{grid-template-columns:1fr;gap:28px}.top{gap:10px}nav{order:3;flex-basis:100%}}
+@media(prefers-reduced-motion:reduce){#toast{transition:none}}
+</style>
+</head>
+<body>
+
+<main id="auth" class="auth" data-role="member" hidden>
+  <section class="hero">
+    <div class="lockers"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <h1>BrankasKu</h1>
+    <p>Tempat aman untuk menyimpan data pribadi dan membuka berkas yang dibagikan admin.</p>
+  </section>
+  <section class="panel">
+    <div class="seg">
+      <button type="button" data-role="member">Login Member</button>
+      <button type="button" data-role="admin">Login Admin</button>
+    </div>
+    <form id="loginForm">
+      <h2 id="loginTitle">Masuk sebagai Member</h2>
+      <label>Username<input name="u" required autocomplete="username"></label>
+      <label>Password<input name="p" type="password" required autocomplete="current-password"></label>
+      <p class="err" id="loginErr" role="alert"></p>
+      <button class="btn">Masuk</button>
+    </form>
+    <p class="hint" id="hint"></p>
+  </section>
+</main>
+
+<div id="app" hidden>
+  <header class="top">
+    <span class="brand">BrankasKu</span>
+    <nav id="nav"></nav>
+    <div class="who"><span id="who"></span><button class="ghost" id="out">Keluar</button></div>
+  </header>
+  <main id="view" class="wrap"></main>
+</div>
+<div id="toast" role="status"></div>
+
+<script>
+/* ===== Util ===== */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=b=>b>1048576?(b/1048576).toFixed(1)+' MB':Math.max(1,Math.round(b/1024))+' KB';
+const LS={get:(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}},set:(k,v)=>localStorage.setItem(k,JSON.stringify(v))};
+let tt;const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),2800)};
+const hash=async(u,p)=>{const s='brankas:'+u+':'+p;
+  if(window.crypto&&crypto.subtle){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+  let h=5381;for(const c of s)h=(h*33^c.charCodeAt(0))>>>0;return 'x'+h};
+
+/* ===== Penyimpanan berkas (IndexedDB) ===== */
+const db=new Promise((res,rej)=>{const r=indexedDB.open('brankasku',1);r.onupgradeneeded=()=>r.result.createObjectStore('items',{keyPath:'id'});r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)});
+const tx=async(mode,fn)=>{const d=await db;return new Promise((res,rej)=>{const t=d.transaction('items',mode);const r=fn(t.objectStore('items'));t.oncomplete=()=>res(r&&r.result);t.onerror=t.onabort=()=>rej(t.error)})};
+const allItems=()=>tx('readonly',s=>s.getAll());
+const putItem=i=>tx('readwrite',s=>s.put(i));
+const delItem=id=>tx('readwrite',s=>s.delete(id));
+
+/* ===== State ===== */
+const MAX=200*1048576;
+const FIELDS=[['nama','Nama lengkap','text'],['email','Email','email'],['hp','No. HP','tel'],['alamat','Alamat','text']];
+const TABS={admin:[['konten','Konten'],['member','Member'],['akun','Akun']],member:[['data','Data Saya'],['konten','Konten'],['akun','Akun']]};
+const CH=[['all','Semua'],['image','Gambar'],['video','Video'],['doc','Dokumen'],['link','Link']];
+const ACC={image:'image/*',video:'video/*',doc:'.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.zip'};
+let me=null,view='',filter='all',role='member',urls=[];
+
+/* ===== Tampilan ===== */
+const inputs=(o={})=>FIELDS.map(([k,l,t])=>`<label>${l}<input name="${k}" type="${t}" value="${esc(o[k])}"></label>`).join('');
+
+const upForm=`<form id="upForm" class="card form"><h3>Unggah konten baru</h3>
+<div class="grid"><label>Jenis<select id="tipe" name="type"><option value="image">Gambar</option><option value="video">Video</option><option value="doc">Dokumen</option><option value="link">Link</option></select></label>
+<label>Judul<input name="title" required maxlength="80"></label></div>
+<label>Deskripsi<textarea name="desc" rows="2" maxlength="300"></textarea></label>
+<label id="fileBox">Berkas (maks. 200 MB)<input type="file" name="file" accept="image/*"></label>
+<label id="urlBox" hidden>Alamat link<input name="url" type="url" placeholder="https://contoh.com"></label>
+<button class="btn">Simpan konten</button></form>`;
+
+function card(i,adm){
+  const o=()=>{const u=URL.createObjectURL(i.blob);urls.push(u);return u};
+  let media,act='';
+  if(i.type==='image'){const u=o();media=`<a href="${u}" target="_blank" rel="noopener"><img src="${u}" alt="${esc(i.title)}"></a>`}
+  else if(i.type==='video')media=`<video controls preload="metadata" src="${o()}"></video>`;
+  else if(i.type==='doc'){const u=o();media=`<div class="doc"><b>${esc((i.name.split('.').pop()||'FILE').toUpperCase().slice(0,4))}</b><span>${esc(i.name)}</span><small>${fmt(i.size)}</small></div>`;
+    act=`<a class="btn sm" href="${u}" target="_blank" rel="noopener">Buka</a><a class="btn sm alt" href="${u}" download="${esc(i.name)}">Unduh</a>`}
+  else{media=`<div class="doc"><b>URL</b><span>${esc(i.url)}</span></div>`;act=`<a class="btn sm" href="${esc(i.url)}" target="_blank" rel="noopener noreferrer">Kunjungi</a>`}
+  if(adm)act+=`<button class="btn sm danger" data-del="${esc(i.id)}">Hapus</button>`;
+  return `<article class="card item">${media}<div class="body"><h4>${esc(i.title)}</h4><p>${esc(i.desc)}</p><div class="row"><small>${new Date(i.date).toLocaleDateString('id-ID')}</small><span>${act}</span></div></div></article>`;
+}
+
+async function vKonten(){
+  const adm=me.role==='admin';
+  const list=(await allItems()).sort((a,b)=>b.date-a.date).filter(i=>filter==='all'||i.type===filter);
+  return (adm?upForm:'')+`<div class="chips">${CH.map(([k,l])=>`<button data-filter="${k}" class="${filter===k?'on':''}">${l}</button>`).join('')}</div>`+
+    (list.length?`<div class="list">${list.map(i=>card(i,adm)).join('')}</div>`:`<p class="empty">${adm?'Belum ada konten. Unggah yang pertama lewat formulir di atas.':'Belum ada konten yang dibagikan admin.'}</p>`);
+}
+
+const vData=()=>`<form id="profForm" class="card form"><h3>Data pribadi saya</h3><p style="color:var(--mut);margin:-6px 0 14px">Username: ${esc(me.u)}</p>
+<div class="grid">${inputs(me)}</div><label>Catatan<textarea name="catatan" rows="3">${esc(me.catatan)}</textarea></label><button class="btn">Simpan data</button></form>`;
+
+function vMember(){
+  const ms=LS.get('users',[]).filter(x=>x.role==='member');
+  return `<form id="memForm" class="card form"><h3>Tambah member</h3><div class="grid">
+<label>Username<input name="u" required pattern="[A-Za-z0-9_.]{3,20}" title="3-20 karakter: huruf, angka, _ atau ."></label>
+<label>Password<input name="p" required minlength="6"></label>${inputs()}</div>
+<label>Catatan<textarea name="catatan" rows="2"></textarea></label><button class="btn">Tambah member</button></form>
+<h3 style="margin-bottom:12px">Daftar member (${ms.length})</h3>`+
+  (ms.length?`<div class="list">${ms.map(m=>`<article class="card mem"><h4>${esc(m.nama||m.u)}</h4><small>@${esc(m.u)}</small><dl>${[...FIELDS.slice(1),['catatan','Catatan']].map(([k,l])=>m[k]?`<dt>${l}</dt><dd>${esc(m[k])}</dd>`:'').join('')}</dl><button class="btn sm danger" data-deluser="${esc(m.u)}">Hapus member</button></article>`).join('')}</div>`:'<p class="empty">Belum ada member. Tambahkan lewat formulir di atas.</p>');
+}
+
+const vAkun=()=>`<form id="passForm" class="card form narrow"><h3>Ganti password</h3>
+<label>Password lama<input name="old" type="password" required autocomplete="current-password"></label>
+<label>Password baru (min. 6 karakter)<input name="nw" type="password" minlength="6" required autocomplete="new-password"></label>
+<button class="btn">Perbarui password</button></form>`;
+
+function showAuth(){
+  const a=role==='admin';
+  $('#auth').dataset.role=role;
+  document.querySelectorAll('.seg button').forEach(b=>b.classList.toggle('on',b.dataset.role===role));
+  $('#loginTitle').textContent=a?'Masuk sebagai Admin':'Masuk sebagai Member';
+  $('#hint').textContent=a?(LS.get('defpw',false)?'Akun awal: username "admin", password "admin123". Segera ganti di menu Akun setelah login.':''):'Belum punya akun? Minta admin untuk membuatkannya.';
+  $('#loginErr').textContent='';
+}
+
+async function render(){
+  urls.forEach(u=>URL.revokeObjectURL(u));urls=[];
+  $('#auth').hidden=!!me;$('#app').hidden=!me;
+  if(!me)return showAuth();
+  if(!TABS[me.role].some(t=>t[0]===view))view=TABS[me.role][0][0];
+  $('#who').innerHTML=`${esc(me.nama||me.u)} <em class="badge">${me.role==='admin'?'Admin':'Member'}</em>`;
+  $('#nav').innerHTML=TABS[me.role].map(([k,l])=>`<button data-view="${k}" class="${view===k?'on':''}">${l}</button>`).join('');
+  const v={konten:vKonten,member:vMember,data:vData,akun:vAkun}[view];
+  $('#view').innerHTML=await v();
+}
+
+/* ===== Aksi ===== */
+document.querySelector('.seg').onclick=e=>{const b=e.target.closest('button');if(b){role=b.dataset.role;showAuth()}};
+
+document.addEventListener('click',async e=>{
+  const t=e.target.closest('[data-view],[data-filter],[data-del],[data-deluser],#out');if(!t)return;
+  const adm=me&&me.role==='admin';
+  try{
+    if(t.id==='out'){sessionStorage.removeItem('sess');me=null}
+    else if(t.dataset.view)view=t.dataset.view;
+    else if(t.dataset.filter)filter=t.dataset.filter;
+    else if(t.dataset.del){if(!adm||!confirm('Hapus konten ini?'))return;await delItem(t.dataset.del);toast('Konten dihapus')}
+    else if(t.dataset.deluser){if(!adm||!confirm('Hapus member ini?'))return;LS.set('users',LS.get('users',[]).filter(x=>x.u!==t.dataset.deluser));toast('Member dihapus')}
+    await render();
+  }catch(err){toast('Terjadi kesalahan: '+err.message)}
+});
+
+document.addEventListener('change',e=>{
+  if(e.target.id!=='tipe')return;
+  const t=e.target.value,f=$('#upForm');
+  f.file.value='';f.file.accept=ACC[t]||'';
+  $('#fileBox').hidden=t==='link';$('#urlBox').hidden=t!=='link';
+});
+
+document.addEventListener('submit',async e=>{
+  e.preventDefault();
+  const f=e.target,d=new FormData(f),id=f.id,adm=me&&me.role==='admin';
+  try{
+    if(id==='loginForm'){
+      const u=d.get('u').trim().toLowerCase();
+      const x=LS.get('users',[]).find(z=>z.u===u&&z.role===role);
+      if(!x||x.h!==await hash(u,d.get('p'))){$('#loginErr').textContent='Username atau password salah. Pastikan Anda memilih tab login yang sesuai.';return}
+      sessionStorage.setItem('sess',u);me=x;f.reset();
+    }
+    else if(id==='upForm'&&adm){
+      const type=d.get('type'),it={id:Date.now().toString(36)+Math.random().toString(36).slice(2,8),type,title:d.get('title').trim(),desc:d.get('desc').trim(),date:Date.now()};
+      if(type==='link'){
+        let u;try{u=new URL(d.get('url'))}catch{return toast('Alamat link tidak valid.')}
+        if(!/^https?:$/.test(u.protocol))return toast('Link harus diawali http:// atau https://')
+        it.url=u.href;
+      }else{
+        const file=d.get('file');
+        if(!file||!file.size)return toast('Pilih berkas terlebih dahulu.');
+        if(file.size>MAX)return toast('Ukuran berkas maksimal 200 MB.');
+        const need={image:'image/',video:'video/'}[type];
+        if(need&&!file.type.startsWith(need))return toast('Jenis berkas tidak sesuai dengan pilihan jenis konten.');
+        Object.assign(it,{blob:file,name:file.name,mime:file.type,size:file.size});
+      }
+      await putItem(it);toast('Konten tersimpan');
+    }
+    else if(id==='memForm'&&adm){
+      const us=LS.get('users',[]),u=d.get('u').trim().toLowerCase();
+      if(us.some(x=>x.u===u))return toast('Username sudah dipakai.');
+      const m={u,h:await hash(u,d.get('p')),role:'member',catatan:d.get('catatan').trim()};
+      FIELDS.forEach(([k])=>m[k]=d.get(k).trim());
+      us.push(m);LS.set('users',us);toast('Member ditambahkan');
+    }
+    else if(id==='profForm'){
+      const us=LS.get('users',[]),x=us.find(z=>z.u===me.u);
+      FIELDS.forEach(([k])=>x[k]=d.get(k).trim());x.catatan=d.get('catatan').trim();
+      LS.set('users',us);me=x;toast('Data tersimpan');
+    }
+    else if(id==='passForm'){
+      const us=LS.get('users',[]),x=us.find(z=>z.u===me.u);
+      if(x.h!==await hash(x.u,d.get('old')))return toast('Password lama salah.');
+      x.h=await hash(x.u,d.get('nw'));LS.set('users',us);
+      if(x.role==='admin')LS.set('defpw',false);
+      me=x;f.reset();toast('Password diperbarui');
+    }
+    else return;
+    await render();
+  }catch(err){toast('Gagal menyimpan: '+(err&&err.message||'penyimpanan browser mungkin penuh'))}
+});
+
+/* ===== Mulai ===== */
+(async()=>{
+  const us=LS.get('users',[]);
+  if(!us.some(x=>x.role==='admin')){
+    us.push({u:'admin',h:await hash('admin','admin123'),role:'admin',nama:'Administrator'});
+    LS.set('users',us);LS.set('defpw',true);
+  }
+  const s=sessionStorage.getItem('sess');
+  me=LS.get('users',[]).find(x=>x.u===s)||null;
+  render();
+})();
+</script>
+</body>
+</html>
