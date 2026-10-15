@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brankas Pribadi</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#12232B;--teal:#0E5A63;--paper:#F3F5F2;--card:#fff;--amber:#E3A92B;--line:#D5DBD7;--mute:#5B6B70;--err:#B3261E}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Bricolage Grotesque',system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.5}
+h1,h2,h3{line-height:1.1;margin:0}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+.btn{background:var(--teal);color:#fff;border:0;border-radius:8px;padding:.7rem 1.1rem;font-weight:600;cursor:pointer;text-decoration:none;display:inline-block}
+.btn:hover{background:var(--ink)}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn.ghost:hover{border-color:var(--ink);background:transparent}
+.btn.danger{background:transparent;color:var(--err);border:1.5px solid var(--line)}
+.btn.sm{padding:.4rem .8rem;font-size:.9rem}
+input,select,textarea{width:100%;padding:.7rem .8rem;border:1.5px solid var(--line);border-radius:8px;background:#fff;margin:.25rem 0 .9rem}
+label{font-size:.9rem;font-weight:600}
+.err{color:var(--err);min-height:1.3em;margin:0 0 .6rem;font-size:.92rem}
+/* login */
+.login{min-height:100vh;display:grid;grid-template-columns:1.1fr 1fr}
+.intro{background:var(--teal);color:#fff;padding:4rem 3rem;display:flex;flex-direction:column;justify-content:flex-end}
+.intro h1{font-size:clamp(3.2rem,8vw,6.5rem);font-weight:800;letter-spacing:-.03em}
+.intro p{max-width:30ch;margin:1.2rem 0 0;font-size:1.15rem;opacity:.9;border-left:4px solid var(--amber);padding-left:1rem}
+.formwrap{display:flex;align-items:center;justify-content:center;padding:2rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.6rem}
+.formwrap .card{width:100%;max-width:400px}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--paper);border-radius:10px;padding:4px;margin-bottom:1.3rem}
+.seg button{border:0;background:transparent;padding:.6rem;border-radius:7px;font-weight:600;cursor:pointer;color:var(--mute)}
+.seg button.on{background:var(--ink);color:#fff}
+.sw{text-align:center;font-size:.92rem;color:var(--mute);margin:1rem 0 0}
+.sw a{color:var(--teal);font-weight:600}
+/* app */
+header{background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.8rem 1.4rem;flex-wrap:wrap}
+header b{font-size:1.25rem;letter-spacing:-.01em}
+.who{display:flex;align-items:center;gap:.8rem;font-size:.92rem}
+.role{background:var(--amber);color:var(--ink);padding:.15rem .6rem;border-radius:99px;font-weight:600;font-size:.8rem}
+header .btn.ghost{color:#fff;border-color:#ffffff55}
+nav{display:flex;gap:.3rem;padding:.8rem 1.4rem 0;border-bottom:1px solid var(--line);overflow-x:auto;background:#fff}
+nav button{border:0;background:none;padding:.7rem 1rem;cursor:pointer;font-weight:600;color:var(--mute);border-bottom:3px solid transparent;white-space:nowrap}
+nav button.on{color:var(--ink);border-color:var(--amber)}
+main.app{max-width:1100px;margin:0 auto;padding:1.6rem 1.4rem 4rem}
+main.app h2{margin-bottom:1.2rem;font-size:1.7rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.1rem}
+.item{display:flex;flex-direction:column;gap:.6rem;padding:0;overflow:hidden}
+.item .body{padding:1rem 1.1rem 1.1rem;display:flex;flex-direction:column;gap:.5rem;flex:1}
+.item img,.item video{width:100%;max-height:240px;object-fit:cover;background:#000;display:block}
+.item h3{font-size:1.1rem}
+.item p{margin:0;color:var(--mute);font-size:.93rem}
+.tag{font-size:.78rem;font-weight:600;color:var(--teal)}
+.doc,.lnk{background:var(--paper);padding:.8rem;border-radius:8px;font-size:.9rem;word-break:break-all}
+.row{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:auto}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:0 1rem}
+.narrow{max-width:560px}
+.empty{padding:2.5rem;text-align:center;color:var(--mute);border:1.5px dashed var(--line);border-radius:14px}
+.member{margin-bottom:.8rem}
+.member summary{cursor:pointer;display:flex;justify-content:space-between;gap:1rem;font-weight:600}
+.member dl{display:grid;grid-template-columns:130px 1fr;gap:.3rem 1rem;margin:1rem 0 .8rem;font-size:.93rem}
+.member dt{color:var(--mute)}.member dd{margin:0}
+form[data-t=link] .f{display:none}
+form:not([data-t=link]) .u{display:none}
+#toast{position:fixed;bottom:1.2rem;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:.7rem 1.2rem;border-radius:8px;opacity:0;transition:opacity .2s;pointer-events:none}
+#toast.show{opacity:1}
+@media(max-width:760px){.login{grid-template-columns:1fr}.intro{padding:2.5rem 1.5rem}.two{grid-template-columns:1fr}.member dl{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="toast" role="status"></div>
+
+<script>
+/* ========== Utilitas & penyimpanan ========== */
+const $ = (s, e = document) => e.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+const LS = {
+  get: (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } },
+  set: (k, v) => localStorage.setItem(k, JSON.stringify(v))
+};
+const users = () => LS.get('users', []);
+const items = () => LS.get('items', []);
+const hash = async p => [...new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(p)))].map(b => b.toString(16).padStart(2, '0')).join('');
+
+// IndexedDB untuk menyimpan berkas (gambar, video, dokumen)
+const dbp = new Promise((res, rej) => {
+  const r = indexedDB.open('brankas', 1);
+  r.onupgradeneeded = () => r.result.createObjectStore('files');
+  r.onsuccess = () => res(r.result);
+  r.onerror = () => rej(r.error);
+});
+const idb = async (mode, fn) => {
+  const d = await dbp;
+  return new Promise((res, rej) => {
+    const q = fn(d.transaction('files', mode).objectStore('files'));
+    q.onsuccess = () => res(q.result);
+    q.onerror = () => rej(q.error);
+  });
+};
+const toast = m => { const t = $('#toast'); t.textContent = m; t.classList.add('show'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('show'), 2600); };
+
+/* ========== State ========== */
+let S = { tab: 'konten', role: 'member', mode: 'login', err: '' };
+let urls = [];
+const cur = () => users().find(x => x.u === sessionStorage.getItem('sess'));
+const TYPES = { image: 'Gambar', video: 'Video', doc: 'Dokumen', link: 'Tautan' };
+const FIELDS = [['nama','Nama lengkap'],['telepon','Telepon'],['email','Email'],['lahir','Tanggal lahir'],['alamat','Alamat']];
+
+/* ========== Tampilan ========== */
+function loginView() {
+  const reg = S.mode === 'reg' && S.role === 'member';
+  return `<main class="login">
+  <section class="intro"><h1>Brankas<br>Pribadi</h1><p>Simpan data pribadi dan lihat berkas yang dibagikan admin.</p></section>
+  <section class="formwrap"><div class="card">
+    <div class="seg" role="tablist">
+      <button class="${S.role==='member'?'on':''}" data-act="role" data-v="member">Member / Tamu</button>
+      <button class="${S.role==='admin'?'on':''}" data-act="role" data-v="admin">Admin</button>
+    </div>
+    <form id="${reg?'rf':'lf'}">
+      ${reg?`<label>Nama lengkap</label><input name="nama" required autocomplete="name">`:''}
+      <label>Nama pengguna</label><input name="u" required autocomplete="username">
+      <label>Kata sandi</label><input name="p" type="password" required autocomplete="${reg?'new-password':'current-password'}">
+      <p class="err">${esc(S.err)}</p>
+      <button class="btn" style="width:100%">${reg?'Buat akun member':'Masuk sebagai '+(S.role==='admin'?'admin':'member')}</button>
+    </form>
+    ${S.role==='member'?`<p class="sw">${reg?'Sudah punya akun?':'Belum punya akun?'} <a href="#" data-act="mode">${reg?'Masuk':'Daftar'}</a></p>`:''}
+  </div></section></main>`;
+}
+
+function appView(me) {
+  const admin = me.role === 'admin';
+  const tabs = [['konten','Konten'],['data','Data pribadi']].concat(admin ? [['unggah','Tambah konten'],['member','Kelola member']] : []);
+  let body = '';
+  if (S.tab === 'konten') body = kontenView(admin);
+  else if (S.tab === 'data') body = dataView(me);
+  else if (S.tab === 'unggah' && admin) body = unggahView();
+  else if (S.tab === 'member' && admin) body = memberView();
+  return `<header><b>Brankas Pribadi</b><div class="who"><span>${esc(me.nama || me.u)}</span><span class="role">${admin?'Admin':'Member'}</span><button class="btn ghost sm" data-act="logout">Keluar</button></div></header>
+  <nav>${tabs.map(t=>`<button class="${S.tab===t[0]?'on':''}" data-act="tab" data-v="${t[0]}">${t[1]}</button>`).join('')}</nav>
+  <main class="app">${body}</main>`;
+}
+
+function kontenView(admin) {
+  const list = items().slice().reverse();
+  if (!list.length) return `<h2>Konten</h2><div class="empty">${admin?'Belum ada konten. Buka tab “Tambah konten” untuk mengunggah gambar, video, dokumen, atau tautan.':'Admin belum membagikan konten.'}</div>`;
+  return `<h2>Konten</h2><div class="grid">${list.map(i => {
+    let media = '';
+    if (i.type === 'image') media = `<img data-fid="${i.fid}" alt="${esc(i.title)}">`;
+    else if (i.type === 'video') media = `<video controls preload="metadata" data-fid="${i.fid}"></video>`;
+    const act = i.type === 'doc' ? `<div class="doc">${esc(i.name)}</div><div class="row"><a class="btn sm" data-fid="${i.fid}" download="${esc(i.name)}">Unduh</a>${admin?`<button class="btn danger sm" data-act="del" data-v="${i.id}">Hapus</button>`:''}</div>`
+      : i.type === 'link' ? `<div class="lnk">${esc(i.url)}</div><div class="row"><a class="btn sm" href="${esc(i.url)}" target="_blank" rel="noopener noreferrer">Buka tautan</a>${admin?`<button class="btn danger sm" data-act="del" data-v="${i.id}">Hapus</button>`:''}</div>`
+      : admin ? `<div class="row"><button class="btn danger sm" data-act="del" data-v="${i.id}">Hapus</button></div>` : '';
+    return `<article class="card item">${media}<div class="body"><span class="tag">${TYPES[i.type]}</span><h3>${esc(i.title)}</h3>${i.desc?`<p>${esc(i.desc)}</p>`:''}${act}</div></article>`;
+  }).join('')}</div>`;
+}
+
+function dataView(me) {
+  const p = me.profile || {};
+  return `<h2>Data pribadi</h2><form id="pf" class="card narrow">
+    ${FIELDS.map(([k,l]) => k==='alamat'
+      ? `<label>${l}</label><textarea name="${k}" rows="2">${esc(p[k])}</textarea>`
+      : `<label>${l}</label><input name="${k}" type="${k==='lahir'?'date':k==='email'?'email':'text'}" value="${esc(p[k])}">`).join('')}
+    <label>Catatan</label><textarea name="catatan" rows="3">${esc(p.catatan)}</textarea>
+    <label>Ganti kata sandi (kosongkan jika tidak diubah)</label><input name="np" type="password" minlength="6" autocomplete="new-password">
+    <button class="btn">Simpan data</button></form>`;
+}
+
+function unggahView() {
+  return `<h2>Tambah konten</h2><form id="uf" class="card narrow" data-t="image">
+    <label>Jenis konten</label>
+    <select name="type" id="ut">${Object.entries(TYPES).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select>
+    <label>Judul</label><input name="title" required>
+    <label>Deskripsi (opsional)</label><textarea name="desc" rows="2"></textarea>
+    <div class="f"><label>Pilih berkas</label><input type="file" name="file" id="ufile" accept="image/*"></div>
+    <div class="u"><label>Alamat tautan</label><input name="url" placeholder="https://contoh.com"></div>
+    <button class="btn">Unggah</button></form>`;
+}
+
+function memberView() {
+  const ms = users().filter(u => u.role === 'member');
+  return `<h2>Kelola member</h2>
+  <form id="af" class="card narrow" style="margin-bottom:1.5rem"><h3 style="margin-bottom:1rem">Tambah member baru</h3>
+    <div class="two"><div><label>Nama lengkap</label><input name="nama" required></div><div><label>Nama pengguna</label><input name="u" required></div></div>
+    <label>Kata sandi</label><input name="p" type="password" minlength="6" required autocomplete="new-password">
+    <p class="err">${esc(S.err)}</p><button class="btn">Tambah member</button></form>
+  ${ms.length ? ms.map(m => { const p = m.profile || {}; return `<details class="card member"><summary><span>${esc(m.nama || m.u)} <small style="color:var(--mute);font-weight:400">@${esc(m.u)}</small></span></summary>
+    <dl>${FIELDS.concat([['catatan','Catatan']]).map(([k,l])=>`<dt>${l}</dt><dd>${esc(p[k]) || '-'}</dd>`).join('')}</dl>
+    <button class="btn danger sm" data-act="delm" data-v="${esc(m.u)}">Hapus member</button></details>`; }).join('') : '<div class="empty">Belum ada member.</div>'}`;
+}
+
+function render() {
+  urls.forEach(URL.revokeObjectURL); urls = [];
+  const me = cur();
+  $('#app').innerHTML = me ? appView(me) : loginView();
+  if (me) hydrate();
+}
+
+// Muat berkas dari IndexedDB ke elemen gambar/video/unduhan
+async function hydrate() {
+  for (const el of document.querySelectorAll('[data-fid]')) {
+    try {
+      const f = await idb('readonly', s => s.get(el.dataset.fid));
+      if (!f) continue;
+      const u = URL.createObjectURL(f); urls.push(u);
+      el.tagName === 'A' ? el.href = u : el.src = u;
+    } catch (e) { console.error(e); }
+  }
+}
+
+/* ========== Aksi ========== */
+document.addEventListener('click', async e => {
+  const b = e.target.closest('[data-act]'); if (!b) return;
+  const a = b.dataset.act, v = b.dataset.v;
+  if (a === 'mode') { e.preventDefault(); S.mode = S.mode === 'login' ? 'reg' : 'login'; S.err = ''; }
+  else if (a === 'role') { S.role = v; S.mode = 'login'; S.err = ''; }
+  else if (a === 'tab') { S.tab = v; S.err = ''; }
+  else if (a === 'logout') { sessionStorage.removeItem('sess'); S = { tab: 'konten', role: 'member', mode: 'login', err: '' }; }
+  else if (a === 'del') {
+    if (!confirm('Hapus konten ini?')) return;
+    const it = items().find(i => i.id === v);
+    if (it?.fid) await idb('readwrite', s => s.delete(it.fid));
+    LS.set('items', items().filter(i => i.id !== v)); toast('Konten dihapus');
+  }
+  else if (a === 'delm') {
+    if (!confirm('Hapus member ini beserta datanya?')) return;
+    LS.set('users', users().filter(u => u.u !== v)); toast('Member dihapus');
+  }
+  render();
+});
+
+document.addEventListener('change', e => {
+  if (e.target.id !== 'ut') return;
+  const t = e.target.value, f = $('#uf'), file = $('#ufile');
+  f.dataset.t = t;
+  file.accept = { image: 'image/*', video: 'video/*', doc: '.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.zip' }[t] || '';
+});
+
+document.addEventListener('submit', async e => {
+  e.preventDefault();
+  const f = e.target, fd = new FormData(f), id = f.id;
+  try {
+    if (id === 'lf') {
+      const u = fd.get('u').trim().toLowerCase(), h = await hash(fd.get('p'));
+      const x = users().find(z => z.u === u && z.h === h && z.role === S.role);
+      if (!x) { S.err = 'Nama pengguna atau kata sandi salah.'; return render(); }
+      sessionStorage.setItem('sess', u); S.err = ''; S.tab = 'konten';
+    }
+    else if (id === 'rf' || id === 'af') {
+      const u = fd.get('u').trim().toLowerCase(), p = fd.get('p');
+      if (!/^[a-z0-9_.-]{3,}$/.test(u)) { S.err = 'Nama pengguna minimal 3 karakter (huruf, angka, _ . -).'; return render(); }
+      if (p.length < 6) { S.err = 'Kata sandi minimal 6 karakter.'; return render(); }
+      if (users().some(z => z.u === u)) { S.err = 'Nama pengguna sudah dipakai.'; return render(); }
+      LS.set('users', [...users(), { u, h: await hash(p), role: 'member', nama: fd.get('nama').trim(), profile: { nama: fd.get('nama').trim() } }]);
+      S.err = '';
+      if (id === 'rf') { sessionStorage.setItem('sess', u); S.tab = 'data'; } else toast('Member ditambahkan');
+    }
+    else if (id === 'pf') {
+      const all = users(), me = all.find(z => z.u === sessionStorage.getItem('sess'));
+      me.profile = Object.fromEntries([...FIELDS.map(x => x[0]), 'catatan'].map(k => [k, fd.get(k).trim()]));
+      if (me.profile.nama) me.nama = me.profile.nama;
+      const np = fd.get('np');
+      if (np) { if (np.length < 6) return toast('Kata sandi baru minimal 6 karakter'); me.h = await hash(np); }
+      LS.set('users', all); toast('Data tersimpan');
+    }
+    else if (id === 'uf') {
+      const type = fd.get('type'), file = fd.get('file');
+      const it = { id: uid(), type, title: fd.get('title').trim(), desc: fd.get('desc').trim(), date: Date.now() };
+      if (type === 'link') {
+        let url = fd.get('url').trim(); if (!url) return toast('Isi alamat tautan');
+        if (!/^https?:\/\//i.test(url)) url = 'https://' + url; it.url = url;
+      } else {
+        if (!file || !file.size) return toast('Pilih berkas terlebih dahulu');
+        it.fid = it.id; it.name = file.name;
+        await idb('readwrite', s => s.put(file, it.fid));
+      }
+      LS.set('items', [...items(), it]); S.tab = 'konten'; toast('Konten diunggah');
+    }
+  } catch (err) { console.error(err); toast('Terjadi kesalahan: penyimpanan browser mungkin penuh.'); return; }
+  render();
+});
+
+/* ========== Mulai ========== */
+(async () => {
+  if (!users().some(u => u.role === 'admin'))
+    LS.set('users', [...users(), { u: 'admin', h: await hash('admin123'), role: 'admin', nama: 'Administrator', profile: {} }]);
+  render();
+})();
+</script>
+</body>
+</html>
